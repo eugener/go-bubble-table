@@ -320,6 +320,22 @@ func (m *Model) GoLeft() {
 	m.updateView()
 }
 
+func (m *Model) SetCursor(index int) {
+	if index < 0 || index > len(m.rows)-1 || m.cursor == index {
+		return
+	}
+	cursorDelta := index - m.cursor
+	m.cursor = index
+	m.updateView()
+
+	if cursorDelta > 0 {
+		m.viewPort.LineDown(cursorDelta)
+	} else {
+		m.viewPort.LineDown(-cursorDelta)
+	}
+
+}
+
 // Update tea.Model implementor.
 // It handles the key events.
 func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
